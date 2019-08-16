@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyARM8X6NqR5X06E9RlA2msDcOn-7swf-VA",
+    authDomain: "thk-2019.firebaseapp.com",
+    databaseURL: "https://thk-2019.firebaseio.com",
+    projectId: "thk-2019",
+    storageBucket: "thk-2019.appspot.com",
+    messagingSenderId: "152189405672",
+    appId: "1:152189405672:web:f13c63f4f0b65325"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var ref=firebase.database().ref('text/verb');
+function split(){
+	 var content=document.getElementById("console");
+  ref=firebase.database().ref('text/verb');
+  ref.once("value",function(snapshot){
+  	let element=document.createElement("p");
+  	let te=document.createTextNode("!! แยกข้อมูล Array...");
+  	element.appendChild(te);
+  	document.getElementById("console").appendChild(element);
+  	let text=snapshot.val();
+  	text=text.substring(2,(text.length-2));
+  	let arr=text.split(",");
+  	ref=firebase.database().ref('text/converter/verb');
+  	ref.remove();
+  	arr.forEach(texts=>create(texts));
+
+  },function(err){
+
+  });
+  function create(string){
+  	console.log(string);
+  	var ref=firebase.database().ref('text/converter/verb');
+  	let element=document.createElement("p");
+  	let text=document.createTextNode("-แปลงข้อมูล "+string);
+  	element.appendChild(text);
+  	document.getElementById("console").appendChild(element);
+  	ref.child(string.substring(1,string.length-1)).set(0);
+  	window.scrollTo(0,document.body.scrollHeight);
+  	
+  }
+
+
+  ref=firebase.database().ref('text/sub');
+  ref.once("value",function(snapshot){
+  	let element=document.createElement("p");
+  	let te=document.createTextNode("!! แยกข้อมูล Array...");
+  	element.appendChild(te);
+  	document.getElementById("console").appendChild(element);
+  	let text=snapshot.val();
+  	text=text.substring(2,(text.length-2));
+  	let arr=text.split(",");
+  	ref=firebase.database().ref('text/converter/sub');
+  	ref.remove();
+    arr.forEach(texts=>createtwo(texts));
+
+  },function(err){
+
+  });
+  function createtwo(string){
+  	console.log(string);
+  	ref=firebase.database().ref('text/converter/sub');
+  	let element=document.createElement("p");
+  	let text=document.createTextNode("-แปลงข้อมูล "+string);
+  	element.appendChild(text);
+  	document.getElementById("console").appendChild(element);
+  	ref.child(string.substring(1,string.length-1)).set(0);
+  	window.scrollTo(0,document.body.scrollHeight);
+  }
+}
+
+</script>
+<style type="text/css">
+	@import url('https://fonts.googleapis.com/css?family=Kanit&display=swap');
+	body{
+		background-color: #29252C;
+		color:#7ED530;
+		padding: 0;
+		margin:0;
+		font-family: 'Kanit', sans-serif;
+	}
+	#console{
+		padding: 10px 25px;
+	}
+	.footer{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		padding: 10px 25px;
+		background-color: #2B2331;
+		opacity: 0;
+	}
+	.footer:hover{
+		transition:all 0.5s ease;
+		opacity: 1;
+	}
+	input[type="text"]{
+		font-family: 'Kanit', sans-serif;
+		padding: 10px 25px;
+		background-color: #2B2331;
+		border:1px solid #2B2331;
+		outline: none;
+		color:#7ED530;
+	}
+	::-webkit-scrollbar{
+		width:0;
+	}
+</style>
+</head>
+<body>
+
+
+<div id="console">
+	<p>==========================================================</p>
+    <p>    DATABASE THK COMPRO2019</p>
+    <p>==========================================================</p>
+</div>
+<div class="footer">
+	<a>@Admin / firebase / database :</a><input type="text" name="" width="100%" id="control">
+</div>
+<script type="text/javascript">
+	function search(text){
+		ref=firebase.database().ref(text);
+		ref.once("value",function(snapshot){
+  	    set("รายละเอียดข้อมูล");
+  	    set(snapshot.val());
+
+        },function(err){
+        	set("ไม่สามารถโหลดข้อมูลได้");
+        });
+	}
+
+	function set(texts){
+		let textcontrol=document.getElementById("control");
+		textcontrol.value="";
+		let elements=document.createElement("p");
+  	    let te=document.createTextNode(texts);
+  	    elements.appendChild(te);
+  	    document.getElementById("console").appendChild(elements);
+  	    window.scrollTo(0,document.body.scrollHeight);
+	}
+	var textcontrol=document.getElementById("control");
+textcontrol.addEventListener('keyup',function(){
+if(event.keyCode===13){
+	let com=textcontrol.value;
+	if(com.search("สร้าง")>-1){
+		let texts=textcontrol.value;
+		let array=texts.split("/");
+		if(array.length==4){
+ref=firebase.database().ref(array[1]);
+ref.child(array[2]).set(array[3]);
+set("==== สร้างข้อมูล ที่ "+array[1]+" ====");
+set("-ชื่อ "+array[2]+" ค่า "+array[3]);
+		}else if(array.length==5){
+ref=firebase.database().ref(array[1]+"/"+array[2]);
+ref.child(array[3]).set(array[4]);
+set("==== สร้างข้อมูล ที่ "+array[1]+"/"+array[2]+" ====");
+set("-ชื่อ "+array[3]+" ค่า "+array[4]);
+		}else{
+			set("** กรุณากรอกข้อมูลให้ครบ **");
+		}
+	}else if(com.search("ดู")>-1){
+
+let texts=textcontrol.value;
+		let array=texts.split("/");
+		if(array.length==3){
+			set("** กำลังโหลดข้อมูล **");
+search(array[1]+"/"+array[2]);
+		}else if(array.length==4){
+			set("** กำลังโหลดข้อมูล **");
+search(array[1]+"/"+array[2]+"/"+array[3]);
+		}else{
+			set("** กรุณากรอกข้อมูลให้ครบ **");
+		}
+	}else{
+	if(textcontrol.value=="+แยกข้อมูล"){
+		set("** กำลังโหลดข้อมูล **");
+		split();
+	}else if(textcontrol.value=="+ข้อมูล-คำประธาน"){
+		set("เรียกใช้ข้อมูล คำประธาน");
+		search('text/sub');
+	}else if(textcontrol.value=="+ข้อมูล-คำกริยา"){
+		set("เรียกใช้ข้อมูล คำกริยา");
+		set("โหลดข้อมูลได้");
+		search('text/verb');
+	}else if(textcontrol.value=="+ช่วยเหลือ"){
+		set(" ");
+		set("# คำสั่ง #");
+		set("+แยกข้อมูล = ใช้แยกข้อมูล ประธาน และ คำกริยา");
+		set("+ข้อมูล-คำประธาน = ใช้ดูข้อมูลคำ ประธาน แบบยังไม่แยก");
+		set("+ข้อมูล-คำกริยา = ใช้ดูข้อมูลคำ กริยา แบบยังไม่แยก");
+		set("ดู/ไดเร็กทอรี่/ชื่อแท็ก = ใช้ดูข้อมูลเฉพาะเจาะจง");
+		set("สร้าง/ไดเร็กทอรี่/ชื่อแท็ก/ค่า = ใช้สร้างข้อมูลเฉพาะเจาะจง");
+		set(" ");
+	}else{
+		console.log("t");
+		set("\""+textcontrol.value+"\" ไม่พบคำสั่งนี้ พิมพ์ +ช่วยเหลือ เพื่อแสดงคำสั่งทั้งหมด");
+	}}
+}
+},false);
+</script>
+</body>
+</html>
