@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,6 +126,7 @@ function split(){
     <p>    DATABASE THK COMPRO2019</p>
     <p>==========================================================</p>
 </div>
+
 <div class="footer">
 	<a>@Admin / firebase / database :</a><input type="text" name="" width="100%" id="control">
 </div>
@@ -179,6 +181,21 @@ search(array[1]+"/"+array[2]);
 		}else if(array.length==4){
 			set("** กำลังโหลดข้อมูล **");
 search(array[1]+"/"+array[2]+"/"+array[3]);
+		}else{
+			set("** กรุณากรอกข้อมูลให้ครบ **");
+		}
+	}else if(com.search("ลบ")>-1){
+
+let texts=textcontrol.value;
+		let array=texts.split("/");
+		if(array.length==3){
+			set("** กำลังลบข้อมูล **");
+ref=firebase.database().ref(array[1]+"/"+array[2]);
+ref.remove();
+		}else if(array.length==4){
+			set("** กำลังลบข้อมูล **");
+ref=firebase.database().ref(array[1]+"/"+array[2]+"/"+array[3]);
+ref.remove();
 		}else{
 			set("** กรุณากรอกข้อมูลให้ครบ **");
 		}
